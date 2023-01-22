@@ -1,10 +1,10 @@
 import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
+import { isValidToken } from "@/utils";
 import type { TUser } from "@/types/gh-followers.types";
 import GitHubService from "@/services/github.service";
-import { isValidToken } from "@/utils";
 
-export const useMainStore = defineStore("main", () => {
+export const useGitHubStore = defineStore("main", () => {
   let githubService: GitHubService;
 
   const isResultReady = ref(false);

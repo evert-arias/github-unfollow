@@ -1,17 +1,19 @@
 <script setup lang="ts">
-import { useMainStore } from "@/stores/main-store";
+import { useGitHubStore } from "@/stores";
 import type { TUser } from "@/types/gh-followers.types";
-const store = useMainStore();
+
+const ghStore = useGitHubStore();
+
 const props = defineProps<{
   users: TUser[];
 }>();
 
 async function unfollow(user: TUser) {
-  const result = await store.unfollow(user.login);
+  const isUnfollowed = await ghStore.unfollow(user.login);
 
   let index = props.users.findIndex((obj) => obj.login === user.login);
 
-  if (result && index !== -1) {
+  if (isUnfollowed && index !== -1) {
     props.users.splice(index, 1);
   }
 }
@@ -24,7 +26,7 @@ async function unfollow(user: TUser) {
           >The Unfollowers! {{ props.users.length }}</span
         >
         <button
-          v-if="store.isToken"
+          v-if="ghStore.isToken"
           class="hover:bg-red-400 text-red-900 font-bold py-1 px-1 border-b-4 border-red-700 hover:border-red-500 rounded ml-auto uppercase"
         >
           Unfollow All
@@ -58,7 +60,7 @@ async function unfollow(user: TUser) {
               Get
             </button>
             <button
-              v-if="store.isToken"
+              v-if="ghStore.isToken"
               @click="unfollow(user)"
               class="bg-red-200 hover:bg-red-400 text-red-900 font-bold py-1 px-1 border-b-4 border-red-700 hover:border-red-500 rounded uppercase"
             >
