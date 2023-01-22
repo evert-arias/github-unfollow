@@ -1,45 +1,59 @@
-import { ref, computed, reactive } from "vue";
+import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
 import type { TUser } from "@/types/gh-followers.types";
-import GitHubFollowersService from "@/services/gh-followers.service";
+import GitHubService from "@/services/github.service";
+import { isValidToken } from "@/utils";
 
 export const useMainStore = defineStore("main", () => {
+  let githubService: GitHubService;
+
   const isResultReady = ref(false);
 
-  const github = new GitHubFollowersService();
+  const isToken = ref();
 
   let unfollowers: TUser[] = reactive([]);
 
   let followers: TUser[] = reactive([]);
 
-  const setReady = () => {
-    isResultReady.value = !isResultReady.value;
-  };
+  let following: TUser[] = reactive([]);
 
-  const getFollowers = async (username: string) => {
-    const _followers = await github.getFollowers(username);
-    console.log(_followers);
+  const getData = async (tokenOrUser: string) => {
+    isToken.value = isValidToken(tokenOrUser);
+
+    githubService = new GitHubService(tokenOrUser);
+
+    // Retrieve followers
+    const _followers = await githubService.getFollowers();
+
+    // Retrieve following
+    const _following = await githubService.getFollowing();
+
+    // Retrieve unfollowers
+    const _unfollowers = githubService.findUnfollowers(_followers, _following);
+
     Object.assign(followers, _followers);
+    Object.assign(following, _following);
+    Object.assign(unfollowers, _unfollowers);
+
     isResultReady.value = true;
   };
 
-  const getUnfollowers = async (username: string) => {
-    const _followers = await github.getFollowers(username);
-    const _followings = await github.getFollowing(username);
-    const _unfollowers = github.findFollowingNotFollowers(
-      _followers,
-      _followings
-    );
-    Object.assign(unfollowers, _unfollowers);
-    isResultReady.value = true;
+  const follow = async (username: string) => {
+    await githubService.follow(username);
+  };
+
+  const unfollow = async (username: string): Promise<boolean> => {
+    return await githubService.unfollow(username);
   };
 
   return {
     isResultReady,
-    setReady,
-    getFollowers,
     followers,
+    following,
     unfollowers,
-    getUnfollowers,
+    isToken,
+    follow,
+    unfollow,
+    getData,
   };
 });
