@@ -26,11 +26,7 @@ async function onGet(tokenOrUsername: any) {
         <span class="text-green-700 font-bold">{{
           store.followers.length
         }}</span>
-        followers. Out of the users this user is currently following, only
-        <span class="text-green-700 font-bold">{{
-          store.followers.length - store.unfollowers.length
-        }}</span>
-        have reciprocated by following back.
+        followers.
       </p>
     </div>
     <TheUnfollowers
@@ -44,7 +40,7 @@ async function onGet(tokenOrUsername: any) {
     >
       Looks like you're the only one putting in the effort in these one-sided
       relationships, these users are getting a free ride by not following you
-      back despite you following them. 😇
+      back despite you following them. 😎
     </p>
   </div>
 </template>
