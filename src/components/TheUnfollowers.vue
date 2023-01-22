@@ -54,10 +54,10 @@ async function unfollow(user: TUser) {
           </div>
           <div class="flex gap-1 mt-2 sm:ml-auto">
             <button
-              @click="$emit('on-get', user.login)"
+              @click="$emit('on-lookup', user.login)"
               class="w-24 bg-sky-200 hover:bg-sky-400 text-sky-900 font-bold py-1 px-1 border-b-4 border-sky-700 hover:border-sky-500 rounded ml-auto uppercase"
             >
-              Get
+              Lookup
             </button>
             <button
               v-if="ghStore.isToken"

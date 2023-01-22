@@ -4,14 +4,14 @@ import { useGitHubStore } from "./stores";
 
 const ghStore = useGitHubStore();
 
-async function onGet(tokenOrUsername: any) {
+async function onLookup(tokenOrUsername: any) {
   await ghStore.getData(tokenOrUsername);
 }
 </script>
 
 <template>
   <div class="lg:w-xl flex flex-col items-center">
-    <EntryPoint @on-get="onGet" />
+    <EntryPoint @on-lookup="onLookup" />
 
     <div class="lg:max-w-xl my-6" v-if="ghStore.isResultReady">
       <p class="text-xl font-light text-center text-slate-600">
@@ -29,7 +29,7 @@ async function onGet(tokenOrUsername: any) {
     <TheUnfollowers
       :users="ghStore.unfollowers"
       v-if="ghStore.isResultReady"
-      @on-get="onGet"
+      @on-lookup="onLookup"
     />
     <p
       v-if="ghStore.isResultReady"

@@ -31,8 +31,13 @@ export const useGitHubStore = defineStore("main", () => {
     // Retrieve unfollowers
     const _unfollowers = githubService.findUnfollowers(_followers, _following);
 
+    followers.splice(0, followers.length - 1);
     Object.assign(followers, _followers);
+
+    following.splice(0, following.length - 1);
     Object.assign(following, _following);
+
+    unfollowers.splice(0, unfollowers.length - 1);
     Object.assign(unfollowers, _unfollowers);
 
     isResultReady.value = true;
