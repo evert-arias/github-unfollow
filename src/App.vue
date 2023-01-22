@@ -15,7 +15,7 @@ async function onLookup(tokenOrUsername: any) {
 </script>
 
 <template>
-  <div class="lg:w-xl flex flex-col items-center">
+  <div class="lg:w-lg flex flex-col items-center">
     <EntryPoint @on-lookup="onLookup" :is-loading="isLoading" />
 
     <div class="lg:max-w-xl my-6" v-if="ghStore.isResultReady">
@@ -35,10 +35,11 @@ async function onLookup(tokenOrUsername: any) {
       :users="ghStore.unfollowers"
       v-if="ghStore.isResultReady"
       @on-lookup="onLookup"
+      class="md:max-w-xl"
     />
     <p
       v-if="ghStore.isResultReady"
-      class="text-red-900 text-xl font-light text-center mt-6 dark:text-white"
+      class="text-red-900 text-xl font-light text-center mt-6 dark:text-white hidden md:block"
     >
       Looks like you're the only one putting in the effort in these one-sided
       relationships, these users are getting a free ride by not following you
