@@ -37,13 +37,5 @@ async function onLookup(tokenOrUsername: any) {
       @on-lookup="onLookup"
       class="md:max-w-xl"
     />
-    <p
-      v-if="ghStore.isResultReady"
-      class="text-red-900 text-xl font-light text-center mt-6 dark:text-white hidden md:block"
-    >
-      Looks like you're the only one putting in the effort in these one-sided
-      relationships, these users are getting a free ride by not following you
-      back despite you following them. 😎
-    </p>
   </div>
 </template>

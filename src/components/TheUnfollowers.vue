@@ -30,8 +30,8 @@ async function unfollow(user: TUser) {
 </script>
 <template>
   <div class="w-full">
-    <div class="bg-yellow-50 rounded-md overflow-hidden">
-      <div class="bg-yellow-100 px-6 py-2 flex justify-center">
+    <div class="bg-red-50 rounded-md overflow-hidden">
+      <div class="bg-red-100 px-6 py-2 flex justify-center">
         <span class="text-lg font-medium text-red-900 mr-auto"
           >The Unfollowers! {{ props.users.length }}</span
         >
