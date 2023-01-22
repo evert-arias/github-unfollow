@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref } from "vue";
-
 const tokenOrUsername = ref("");
 </script>
 
@@ -26,10 +25,10 @@ const tokenOrUsername = ref("");
         placeholder="GitHub username or token"
       />
       <button
-        @click="$emit('on-get', tokenOrUsername)"
+        @click="$emit('on-lookup', tokenOrUsername)"
         class="bg-sky-500 hover:bg-sky-400 text-white font-bold py-2 px-4 border-b-4 border-sky-700 hover:border-sky-500 rounded uppercase w-36"
       >
-        Get
+        Lookup
       </button>
     </div>
   </div>

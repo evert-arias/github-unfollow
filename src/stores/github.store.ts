@@ -1,10 +1,10 @@
 import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
+import { isValidToken } from "@/utils";
 import type { TUser } from "@/types/gh-followers.types";
 import GitHubService from "@/services/github.service";
-import { isValidToken } from "@/utils";
 
-export const useMainStore = defineStore("main", () => {
+export const useGitHubStore = defineStore("main", () => {
   let githubService: GitHubService;
 
   const isResultReady = ref(false);
@@ -31,8 +31,13 @@ export const useMainStore = defineStore("main", () => {
     // Retrieve unfollowers
     const _unfollowers = githubService.findUnfollowers(_followers, _following);
 
+    followers.splice(0, followers.length - 1);
     Object.assign(followers, _followers);
+
+    following.splice(0, following.length - 1);
     Object.assign(following, _following);
+
+    unfollowers.splice(0, unfollowers.length - 1);
     Object.assign(unfollowers, _unfollowers);
 
     isResultReady.value = true;
