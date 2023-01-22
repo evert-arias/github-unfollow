@@ -4,27 +4,47 @@ import { useMainStore } from "./stores/main-store";
 
 const store = useMainStore();
 
-function getResult(username: any) {
-  console.log("Username", username);
-  store.getUnfollowers(username);
+async function onGet(tokenOrUsername: any) {
+  await store.getData(tokenOrUsername);
+  console.log(`followers: ${store.followers.length}`);
+  console.log(`following: ${store.following.length}`);
+  console.log(`unfollowers: ${store.unfollowers.length}`);
 }
 </script>
 
 <template>
   <div class="lg:w-xl flex flex-col items-center">
-    <EntryPoint @on-get="getResult" />
+    <EntryPoint @on-get="onGet" />
 
-    <div class="lg:w-md my-6" v-if="store.isResultReady">
-      <p class="text-red-900 text-xl font-light text-center">
-        Looks like you're the only one putting in the effort in these one-sided
-        relationships, these users are getting a free ride by not following you
-        back despite you following them. 😇
+    <div class="lg:max-w-xl my-6" v-if="store.isResultReady">
+      <p class="text-xl font-light text-center text-slate-600">
+        This user is currently following
+        <span class="text-orange-700 font-bold">{{
+          store.following.length
+        }}</span>
+        other users and has
+        <span class="text-green-700 font-bold">{{
+          store.followers.length
+        }}</span>
+        followers. Out of the users this user is currently following, only
+        <span class="text-green-700 font-bold">{{
+          store.followers.length - store.unfollowers.length
+        }}</span>
+        have reciprocated by following back.
       </p>
     </div>
     <TheUnfollowers
       :users="store.unfollowers"
       v-if="store.isResultReady"
-      @on-get="getResult"
+      @on-get="onGet"
     />
+    <p
+      v-if="store.isResultReady"
+      class="text-red-900 text-xl font-light text-center mt-6"
+    >
+      Looks like you're the only one putting in the effort in these one-sided
+      relationships, these users are getting a free ride by not following you
+      back despite you following them. 😇
+    </p>
   </div>
 </template>

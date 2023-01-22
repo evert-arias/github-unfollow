@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-const username = ref("");
+const tokenOrUsername = ref("");
 </script>
 
 <template>
@@ -21,13 +21,12 @@ const username = ref("");
     <div class="flex space-x-2">
       <input
         class="font-medium text-lg shadow appearance-none border rounded py-2 px-3 w-full text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-        id="username"
-        v-model="username"
+        v-model="tokenOrUsername"
         type="text"
         placeholder="GitHub username or token"
       />
       <button
-        @click="$emit('on-get', username)"
+        @click="$emit('on-get', tokenOrUsername)"
         class="bg-sky-500 hover:bg-sky-400 text-white font-bold py-2 px-4 border-b-4 border-sky-700 hover:border-sky-500 rounded uppercase w-36"
       >
         Get
