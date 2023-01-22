@@ -9,6 +9,8 @@ export const useGitHubStore = defineStore("main", () => {
 
   const isResultReady = ref(false);
 
+  const isLoading = ref(false);
+
   const isToken = ref();
 
   let unfollowers: TUser[] = reactive([]);
@@ -18,6 +20,9 @@ export const useGitHubStore = defineStore("main", () => {
   let following: TUser[] = reactive([]);
 
   const getData = async (tokenOrUser: string) => {
+    if (!tokenOrUser) return;
+    isLoading.value = true;
+
     isToken.value = isValidToken(tokenOrUser);
 
     githubService = new GitHubService(tokenOrUser);
@@ -41,6 +46,7 @@ export const useGitHubStore = defineStore("main", () => {
     Object.assign(unfollowers, _unfollowers);
 
     isResultReady.value = true;
+    isLoading.value = false;
   };
 
   const follow = async (username: string) => {
@@ -57,6 +63,7 @@ export const useGitHubStore = defineStore("main", () => {
     following,
     unfollowers,
     isToken,
+    isLoading,
     follow,
     unfollow,
     getData,
