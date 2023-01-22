@@ -1,5 +1,7 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { useGitHubStore } from "@/stores";
+import { LoadingSpinner } from "./icons";
 import type { TUser } from "@/types/gh-followers.types";
 
 const ghStore = useGitHubStore();
@@ -8,11 +10,19 @@ const props = defineProps<{
   users: TUser[];
 }>();
 
+const isLoading = ref(false);
+const isLoadingUsername = ref("");
+
+async function onLookup(tokenOrUsername: any) {
+  isLoadingUsername.value = tokenOrUsername;
+  isLoading.value = true;
+  await ghStore.getData(tokenOrUsername);
+  isLoading.value = false;
+}
+
 async function unfollow(user: TUser) {
   const isUnfollowed = await ghStore.unfollow(user.login);
-
   let index = props.users.findIndex((obj) => obj.login === user.login);
-
   if (isUnfollowed && index !== -1) {
     props.users.splice(index, 1);
   }
@@ -54,10 +64,19 @@ async function unfollow(user: TUser) {
           </div>
           <div class="flex gap-1 mt-2 sm:ml-auto">
             <button
-              @click="$emit('on-lookup', user.login)"
+              type="button"
+              :disabled="isLoading && user.login === isLoadingUsername"
+              @click="onLookup(user.login)"
               class="w-24 bg-sky-200 hover:bg-sky-400 text-sky-900 font-bold py-1 px-1 border-b-4 border-sky-700 hover:border-sky-500 rounded ml-auto uppercase"
             >
-              Lookup
+              <div class="flex items-center justify-center">
+                <LoadingSpinner
+                  v-if="isLoading && user.login === isLoadingUsername"
+                />
+                <span v-if="!(user.login === isLoadingUsername && isLoading)"
+                  >Lookup</span
+                >
+              </div>
             </button>
             <button
               v-if="ghStore.isToken"
