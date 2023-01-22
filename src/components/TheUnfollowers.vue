@@ -1,17 +1,30 @@
 <script setup lang="ts">
+import { useMainStore } from "@/stores/main-store";
 import type { TUser } from "@/types/gh-followers.types";
+const store = useMainStore();
 const props = defineProps<{
   users: TUser[];
 }>();
+
+async function unfollow(user: TUser) {
+  const result = await store.unfollow(user.login);
+
+  let index = props.users.findIndex((obj) => obj.login === user.login);
+
+  if (result && index !== -1) {
+    props.users.splice(index, 1);
+  }
+}
 </script>
 <template>
   <div class="w-full">
     <div class="bg-yellow-50 rounded-md overflow-hidden">
       <div class="bg-yellow-100 px-6 py-2 flex justify-center">
-        <span class="text-lg font-medium text-red-900"
+        <span class="text-lg font-medium text-red-900 mr-auto"
           >The Unfollowers! {{ props.users.length }}</span
         >
         <button
+          v-if="store.isToken"
           class="hover:bg-red-400 text-red-900 font-bold py-1 px-1 border-b-4 border-red-700 hover:border-red-500 rounded ml-auto uppercase"
         >
           Unfollow All
@@ -21,6 +34,7 @@ const props = defineProps<{
         <li v-for="user in props.users" class="flex items-center gap-4">
           <a
             :href="user.html_url"
+            target="_blank"
             class="rounded-full border-4 border-red-200 hover:border-red-500 overflow-hidden"
           >
             <img :src="user.avatar_url" alt="Avatar" class="h12 w-12" />
@@ -38,6 +52,8 @@ const props = defineProps<{
             Get
           </button>
           <button
+            v-if="store.isToken"
+            @click="unfollow(user)"
             class="bg-red-200 hover:bg-red-400 text-red-900 font-bold py-1 px-1 border-b-4 border-red-700 hover:border-red-500 rounded uppercase"
           >
             Unfollow
